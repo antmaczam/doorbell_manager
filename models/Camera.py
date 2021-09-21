@@ -18,7 +18,7 @@ class Camera():
   def start_stream(self):
     print('===============================================')
     print('Press q to close camera')
-    print(f'Or ress s to save a picture in {self.path}.jpg')
+    print(f'Or ress s to save a picture in /pictures')
 
     while self.capture.isOpened():        
       catch, frame = self.capture.read()

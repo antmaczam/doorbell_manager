@@ -11,7 +11,7 @@ class Camera():
   def init_camera(self):
     capture = cv2.VideoCapture(self.index)
     if not capture.isOpened():
-      raise Exception('Check if the camera is on or select another index.')
+      raise RuntimeError('Check if the camera is on or select another index.')
     else:
       self.capture = capture
 

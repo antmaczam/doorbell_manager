@@ -1,4 +1,6 @@
-import pyglet,urllib.request,json
+import pyglet
+import urllib.request
+import json
 
 class AudioPlayer():
   def __init__(self,file_name,local_files=True,interval_update=1):

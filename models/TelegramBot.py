@@ -3,7 +3,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from models.AudioPlayer import AudioPlayer, TelegramAudio
 import os
 
-from models.utils import Camera, send_picture, take_picture, DEFAULT_PATH
+from models.utils import Camera, send_picture, take_picture, DEFAULT_PATH, send_signal_open_door, listen_to_rpi
 
 class TelegramBot():
   def __init__(self,token):
@@ -13,13 +13,15 @@ class TelegramBot():
     updater = Updater(self.token)
     dispatcher = updater.dispatcher
 
-    dispatcher.add_handler(CommandHandler("comenzar",start))
+    dispatcher.add_handler(CommandHandler("start",start))
     dispatcher.add_handler(CommandHandler("foto",take_picture))
     dispatcher.add_handler(CommandHandler("video",start_stream))
     dispatcher.add_handler(CommandHandler("abrir",open_door))
     dispatcher.add_handler(MessageHandler(Filters.attachment, capture_audio))
-
+    print('iniciando')
+    
     updater.start_polling()
+    listen_to_rpi()
     updater.idle()
 
 def start(update,context):
@@ -32,7 +34,7 @@ def take_picture(update,context):
   camera = Camera(DEFAULT_PATH)
   camera.init_camera()
   picture_name = camera.take_picture()
-  send_picture(update,picture_name,os.environ['TOKEN'])
+  send_picture(update.message.chat.id,picture_name,os.environ['TOKEN'])
 
 def start_stream(update,context):
   camera = Camera(DEFAULT_PATH)
@@ -53,3 +55,4 @@ def capture_audio(update,context):
 
 def open_door(update,context):
   print('Sending signal to open de door!')
+  send_signal_open_door()
